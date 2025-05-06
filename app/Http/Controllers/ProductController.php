@@ -18,8 +18,13 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->keyword;
+        $sort = $request->query('sort','desc');
+        $category_id = $request->category;
+
+        $query = Product::query();
 
         if ($request->category !== null) {
+            $query = Product::where('category_id',$request->category);
             $products = Product::where('category_id', $request->category)->sortable()->paginate(15);
             $total_count = Product::where('category_id', $request->category)->count();
             $category = Category::find($request->category);
